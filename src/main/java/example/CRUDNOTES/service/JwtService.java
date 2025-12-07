@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
@@ -20,6 +21,7 @@ public class JwtService {
     // 🔑 Algoritmo usado para assinar/verificar o JWT (neste caso HMAC-SHA256)
     private final Algorithm algorithm;
 
+    
     private final Long expirationMs;
 
     // ⚙️ Construtor injeta o segredo e a duração a partir da configuração
@@ -50,11 +52,11 @@ public class JwtService {
         return decodeJwt(token).getSubject();
     }
 
-    public boolean isTokenValid(String token, String email) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         DecodedJWT decodedJWT = decodeJwt(token);
 
         // verifica se o email bate e se o token não expirou
-        return decodedJWT.getSubject().equals(email) &&
+        return decodedJWT.getSubject().equals(userDetails.getUsername()) &&
                 decodedJWT.getExpiresAt().after(new Date());
     }
 
@@ -64,7 +66,7 @@ public class JwtService {
                     .build()
                     .verify(token); // verifica a assinatura e validade do token
         } catch (JWTVerificationException e) {
-            throw new InvalidJwtAuthenticationException("JWT inválido ou expirado", e);
+            throw new InvalidJwtAuthenticationException("JWT invalid or expired", e);
         }
 
     }
