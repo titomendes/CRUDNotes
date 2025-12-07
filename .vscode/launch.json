@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-CrudnotesApplication<CRUDNOTES>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "example.CRUDNOTES.CrudnotesApplication",
+            "projectName": "CRUDNOTES",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
